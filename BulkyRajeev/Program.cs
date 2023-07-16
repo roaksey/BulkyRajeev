@@ -1,7 +1,15 @@
+using BulkyRajeev.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//configure sql connection
+builder.Services.AddDbContext<AppDbContext>(context =>
+    context.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+));
 
 var app = builder.Build();
 
