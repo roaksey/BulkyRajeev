@@ -21,5 +21,12 @@ namespace BulkyRajeev.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Create(Category model)
+        {
+            _db.Categories.Add(model);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
