@@ -24,9 +24,14 @@ namespace BulkyRajeev.Controllers
         [HttpPost]
         public IActionResult Create(Category model)
         {
-            _db.Categories.Add(model);
-            _db.SaveChanges();
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                _db.Categories.Add(model);
+                _db.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model); 
+
         }
     }
 }
