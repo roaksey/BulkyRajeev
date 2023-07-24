@@ -67,5 +67,35 @@ namespace BulkyRajeev.Controllers
             return View(model);
 
         }
-    }
+
+		public IActionResult Delete(int? id)
+		{
+			if (id == null && id == 0)
+			{
+				return NotFound();
+			}
+			//Category? category1 = _db.Categories.Find(id);
+			Category? category2 = _db.Categories.FirstOrDefault(x => x.Id == id);
+			//Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
+			if (category2 is null)
+			{
+				return NotFound();
+			}
+			return View(category2);
+		}
+        [HttpPost,ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+		public IActionResult DeletePost(int? id)
+		{
+			var obj = _db.Categories.Find(id);
+			if (obj == null)
+			{
+				return NotFound();
+			}
+
+			_db.Categories.Remove(obj);
+			_db.SaveChanges();
+			return RedirectToAction("Index");
+		}
+	}
 }
