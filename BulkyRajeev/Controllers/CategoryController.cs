@@ -60,7 +60,7 @@ namespace BulkyRajeev.Controllers
             //}
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(model);
+                _db.Categories.Update(model);
                 _db.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
