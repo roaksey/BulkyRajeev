@@ -24,6 +24,9 @@ namespace BulkyRajeev.Controllers
         [HttpPost]
         public IActionResult Create(Category model)
         {
+            if(model.Name== model.DisplayOrder.ToString()) {
+                ModelState.AddModelError("name", "The Display Order cannot exactly match the Name.");
+            }
             if (ModelState.IsValid)
             {
                 _db.Categories.Add(model);
