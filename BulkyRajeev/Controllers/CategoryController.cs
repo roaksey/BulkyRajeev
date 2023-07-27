@@ -31,6 +31,7 @@ namespace BulkyRajeev.Controllers
             {
                 _db.Categories.Add(model);
                 _db.SaveChanges();
+                TempData["success"] = "Category created sucessfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(model); 
@@ -62,6 +63,7 @@ namespace BulkyRajeev.Controllers
             {
                 _db.Categories.Update(model);
                 _db.SaveChanges();
+                TempData["success"] = "Category updated sucessfully";
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -95,7 +97,8 @@ namespace BulkyRajeev.Controllers
 
 			_db.Categories.Remove(obj);
 			_db.SaveChanges();
-			return RedirectToAction("Index");
+            TempData["success"] = "Category deleted sucessfully";
+            return RedirectToAction("Index");
 		}
 	}
 }
