@@ -1,7 +1,7 @@
-﻿using BulkyRajeev.Models;
+﻿using Bulky.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BulkyRajeev.Data
+namespace Bulky.DataAccess.Data
 {
     public class AppDbContext:DbContext
     {

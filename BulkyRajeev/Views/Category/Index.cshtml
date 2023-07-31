@@ -1,12 +1,6 @@
 ﻿@model List<Category>
-@if(TempData["success"] != null)
-{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script type="text/javascript">
-        toastr.success('@TempData["success"]');
-    </script>
-}
+
+
 <div class="container">
     <div class="row pt-4 pb-3">
         <div class="col-6 ">

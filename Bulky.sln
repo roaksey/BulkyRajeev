@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BulkyRajeev", "BulkyRajeev\BulkyRajeev.csproj", "{FA1D685A-4F48-43C1-89FA-331AECF9FDEC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bulky.DataAccess", "Bulky.DataAccess\Bulky.DataAccess.csproj", "{1B615573-4BD9-4C82-9134-E0E7F9477A9D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{58E2E50C-917D-4ABE-A9AB-484A4584CEB9} = {58E2E50C-917D-4ABE-A9AB-484A4584CEB9}
+		{6B4CE704-65F3-4455-91C8-C0F7E2248F23} = {6B4CE704-65F3-4455-91C8-C0F7E2248F23}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bulky.Models", "Bulky.Models\Bulky.Models.csproj", "{6B4CE704-65F3-4455-91C8-C0F7E2248F23}"
 EndProject

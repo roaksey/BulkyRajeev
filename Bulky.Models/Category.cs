@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace BulkyRajeev.Models
+namespace Bulky.Models
 {
     public class Category
     {
@@ -10,9 +10,9 @@ namespace BulkyRajeev.Models
         [Required]
         [MaxLength(30)]
         [DisplayName("Category Name")]
-        public string  Name { get; set; }
+        public string Name { get; set; }
         [DisplayName("Display Order")]
-        [Range(1,1000,ErrorMessage ="Display order should be between 1 and 1000")]
-        public int  DisplayOrder { get; set; }
+        [Range(1, 1000, ErrorMessage = "Display order should be between 1 and 1000")]
+        public int DisplayOrder { get; set; }
     }
 }

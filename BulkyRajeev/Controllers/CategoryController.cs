@@ -1,5 +1,6 @@
-﻿using BulkyRajeev.Data;
-using BulkyRajeev.Models;
+﻿
+using Bulky.DataAccess.Data;
+using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BulkyRajeev.Controllers
