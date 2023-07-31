@@ -1,20 +1,20 @@
-﻿
-using Bulky.DataAccess.Data;
+﻿using Bulky.DataAccess.Data;
 using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
+using Bulky.DataAccess.Repository.IReposiotry;
 
 namespace BulkyRajeev.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly AppDbContext _db;
-        public CategoryController(AppDbContext db)
+        private readonly ICategoryRepository _dbCategory;
+        public CategoryController(ICategoryRepository db)
         {
-           _db = db;
+           _dbCategory = db;
         }
         public IActionResult Index()
         {
-            List<Category> categories = _db.Categories.ToList();
+            List<Category> categories = _dbCategory.GetAll().ToList();
             return View(categories);
         }
 
@@ -30,8 +30,8 @@ namespace BulkyRajeev.Controllers
             //}
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(model);
-                _db.SaveChanges();
+                _dbCategory.Add(model);
+                _dbCategory.Save();
                 TempData["success"] = "Category created sucessfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -46,7 +46,7 @@ namespace BulkyRajeev.Controllers
                 return NotFound();
             }
             //Category? category1 = _db.Categories.Find(id);
-            Category? category2 = _db.Categories.FirstOrDefault(x=>x.Id == id);
+            Category? category2 = _dbCategory.GetFirstOrDefault(x=>x.Id == id);
             //Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
             if(category2 is null)
             {
@@ -62,8 +62,8 @@ namespace BulkyRajeev.Controllers
             //}
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(model);
-                _db.SaveChanges();
+                _dbCategory.Update(model);
+                _dbCategory.Save();
                 TempData["success"] = "Category updated sucessfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -78,7 +78,7 @@ namespace BulkyRajeev.Controllers
 				return NotFound();
 			}
 			//Category? category1 = _db.Categories.Find(id);
-			Category? category2 = _db.Categories.FirstOrDefault(x => x.Id == id);
+			Category? category2 = _dbCategory.GetFirstOrDefault(x => x.Id == id);
 			//Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
 			if (category2 is null)
 			{
@@ -90,14 +90,14 @@ namespace BulkyRajeev.Controllers
         [ValidateAntiForgeryToken]
 		public IActionResult DeletePost(int? id)
 		{
-			var obj = _db.Categories.Find(id);
+			var obj = _dbCategory.GetFirstOrDefault(x => x.Id == id);
 			if (obj == null)
 			{
 				return NotFound();
 			}
 
-			_db.Categories.Remove(obj);
-			_db.SaveChanges();
+			_dbCategory.Remove(obj);
+			_dbCategory.Save();
             TempData["success"] = "Category deleted sucessfully";
             return RedirectToAction("Index");
 		}

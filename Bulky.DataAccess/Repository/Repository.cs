@@ -1,4 +1,5 @@
-﻿using Bulky.DataAccess.Data.Repository.IReposiotry;
+﻿using Bulky.DataAccess.Data;
+using Bulky.DataAccess.Repository.IReposiotry;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bulky.DataAccess.Data.Repository
+namespace Bulky.DataAccess.Repository
 {
-    internal class Repository<T> : IRepository<T> where T: class
+    public class Repository<T> : IRepository<T> where T : class
     {
         private readonly AppDbContext _db;
         internal DbSet<T> dbSet;
@@ -17,14 +18,14 @@ namespace Bulky.DataAccess.Data.Repository
         {
             _db = db;
             //_dbCateogries == dbSet
-            this.dbSet = _db.Set<T>();  
+            dbSet = _db.Set<T>();
         }
         public void Add(T entity)
         {
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
