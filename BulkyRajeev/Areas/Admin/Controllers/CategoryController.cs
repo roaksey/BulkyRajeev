@@ -3,14 +3,15 @@ using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
 using Bulky.DataAccess.Repository.IReposiotry;
 
-namespace BulkyBookWeb.Controllers
+namespace BulkyBookWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         public CategoryController(IUnitOfWork unitOfWork)
         {
-           _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
@@ -35,20 +36,20 @@ namespace BulkyBookWeb.Controllers
                 TempData["success"] = "Category created sucessfully";
                 return RedirectToAction(nameof(Index));
             }
-            return View(model); 
+            return View(model);
 
         }
 
         public IActionResult Edit(int? id)
         {
-            if(id == null && id==0)
+            if (id == null && id == 0)
             {
                 return NotFound();
             }
             //Category? category1 = _db.Categories.Find(id);
-            Category? category2 = _unitOfWork.Category.GetFirstOrDefault(x=>x.Id == id);
+            Category? category2 = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
             //Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
-            if(category2 is null)
+            if (category2 is null)
             {
                 return NotFound();
             }
@@ -71,35 +72,35 @@ namespace BulkyBookWeb.Controllers
 
         }
 
-		public IActionResult Delete(int? id)
-		{
-			if (id == null && id == 0)
-			{
-				return NotFound();
-			}
-			//Category? category1 = _db.Categories.Find(id);
-			Category? category2 = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
-			//Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
-			if (category2 is null)
-			{
-				return NotFound();
-			}
-			return View(category2);
-		}
-        [HttpPost,ActionName("Delete")]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null && id == 0)
+            {
+                return NotFound();
+            }
+            //Category? category1 = _db.Categories.Find(id);
+            Category? category2 = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+            //Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
+            if (category2 is null)
+            {
+                return NotFound();
+            }
+            return View(category2);
+        }
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-		public IActionResult DeletePost(int? id)
-		{
-			var obj = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
-			if (obj == null)
-			{
-				return NotFound();
-			}
+        public IActionResult DeletePost(int? id)
+        {
+            var obj = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
 
-			_unitOfWork.Category.Remove(obj);
-			_unitOfWork.Save();
+            _unitOfWork.Category.Remove(obj);
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted sucessfully";
             return RedirectToAction("Index");
-		}
-	}
+        }
+    }
 }
