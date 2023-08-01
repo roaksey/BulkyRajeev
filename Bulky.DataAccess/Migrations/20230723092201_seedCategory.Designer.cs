@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BulkyRajeev.Migrations
+namespace BulkyBookWeb.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20230723092201_seedCategory")]
@@ -24,7 +24,7 @@ namespace BulkyRajeev.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BulkyRajeev.Models.Category", b =>
+            modelBuilder.Entity("BulkyBookWeb.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

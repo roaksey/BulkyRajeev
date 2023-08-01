@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace BulkyRajeev.Controllers
+namespace BulkyBookWeb.Controllers
 {
     public class HomeController : Controller
     {

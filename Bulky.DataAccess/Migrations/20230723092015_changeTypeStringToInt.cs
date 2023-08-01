@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace BulkyRajeev.Migrations
+namespace BulkyBookWeb.Migrations
 {
     /// <inheritdoc />
     public partial class changeTypeStringToInt : Migration
