@@ -10,6 +10,5 @@ namespace Bulky.DataAccess.Repository.IReposiotry
     public interface ICategoryRepository : IRepository<Category>
     {
         void Update(Category obj);
-        void Save();
     }
 }
