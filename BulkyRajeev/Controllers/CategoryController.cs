@@ -7,14 +7,14 @@ namespace BulkyBookWeb.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository _dbCategory;
-        public CategoryController(ICategoryRepository db)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-           _dbCategory = db;
+           _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> categories = _dbCategory.GetAll().ToList();
+            List<Category> categories = _unitOfWork.Category.GetAll().ToList();
             return View(categories);
         }
 
@@ -30,8 +30,8 @@ namespace BulkyBookWeb.Controllers
             //}
             if (ModelState.IsValid)
             {
-                _dbCategory.Add(model);
-                _dbCategory.Save();
+                _unitOfWork.Category.Add(model);
+                _unitOfWork.Save();
                 TempData["success"] = "Category created sucessfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -46,7 +46,7 @@ namespace BulkyBookWeb.Controllers
                 return NotFound();
             }
             //Category? category1 = _db.Categories.Find(id);
-            Category? category2 = _dbCategory.GetFirstOrDefault(x=>x.Id == id);
+            Category? category2 = _unitOfWork.Category.GetFirstOrDefault(x=>x.Id == id);
             //Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
             if(category2 is null)
             {
@@ -62,8 +62,8 @@ namespace BulkyBookWeb.Controllers
             //}
             if (ModelState.IsValid)
             {
-                _dbCategory.Update(model);
-                _dbCategory.Save();
+                _unitOfWork.Category.Update(model);
+                _unitOfWork.Save();
                 TempData["success"] = "Category updated sucessfully";
                 return RedirectToAction(nameof(Index));
             }
@@ -78,7 +78,7 @@ namespace BulkyBookWeb.Controllers
 				return NotFound();
 			}
 			//Category? category1 = _db.Categories.Find(id);
-			Category? category2 = _dbCategory.GetFirstOrDefault(x => x.Id == id);
+			Category? category2 = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
 			//Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
 			if (category2 is null)
 			{
@@ -90,14 +90,14 @@ namespace BulkyBookWeb.Controllers
         [ValidateAntiForgeryToken]
 		public IActionResult DeletePost(int? id)
 		{
-			var obj = _dbCategory.GetFirstOrDefault(x => x.Id == id);
+			var obj = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
 			if (obj == null)
 			{
 				return NotFound();
 			}
 
-			_dbCategory.Remove(obj);
-			_dbCategory.Save();
+			_unitOfWork.Category.Remove(obj);
+			_unitOfWork.Save();
             TempData["success"] = "Category deleted sucessfully";
             return RedirectToAction("Index");
 		}
