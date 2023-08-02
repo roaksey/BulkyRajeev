@@ -16,6 +16,12 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var products = _unitOfWork.Product.GetAll();
+            
+            return View(products);
+        }
+
+        public IActionResult Create()
+        {
             IEnumerable<SelectListItem> categoryList = _unitOfWork.Category.GetAll()
                 .Select(x =>
                     new SelectListItem
@@ -24,11 +30,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                         Text = x.Name
                     }
                 );
-            return View(products);
-        }
-
-        public IActionResult Create()
-        {
+            ViewBag.CategoryList = categoryList;
             return View();
         }
         [HttpPost]
