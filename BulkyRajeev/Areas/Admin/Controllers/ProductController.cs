@@ -1,5 +1,6 @@
 ﻿using Bulky.DataAccess.Repository.IReposiotry;
 using Bulky.Models;
+using Bulky.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -30,20 +31,37 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                         Text = x.Name
                     }
                 );
-            ViewBag.CategoryList = categoryList;
-            return View();
+            //ViewBag.CategoryList = categoryList;
+
+            // Using ViewData need type conversion. ViewBag internall use ViewData. Try Not to use ViewBag, ViewData instead go for View Model
+            //ViewData["CategoryList"] = categoryList;
+            ProductVM productVm = new()
+            {
+                CategoryList = _unitOfWork.Category.GetAll()
+                .Select(x => new SelectListItem
+                {
+                    Value = x.Id.ToString(),
+                    Text = x.Name
+                })
+            };     
+          return View(productVm);
         }
         [HttpPost]
-        public IActionResult Create(Product model)
+        public IActionResult Create(ProductVM productVM)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Add(model);
+                _unitOfWork.Product.Add(productVM.Product);
                 _unitOfWork.Save();
                 TempData["success"] = "Product created successfully";
                 return RedirectToAction(nameof(Index)); 
             }
-            return View(model);
+            else
+            {
+                productVM.CategoryList = _unitOfWork.Category.GetAll()
+                    .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
+            }
+            return View(productVM);
         }
         public IActionResult Edit(int id) {
             Product product = _unitOfWork.Product.GetFirstOrDefault(x=>x.Id  == id);
