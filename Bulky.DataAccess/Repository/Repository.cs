@@ -19,22 +19,38 @@ namespace Bulky.DataAccess.Repository
             _db = db;
             //_dbCateogries == dbSet
             dbSet = _db.Set<T>();
+            _db.Products.Include(x => x.Category).Include(y => y.CategoryId);
         }
         public void Add(T entity)
         {
             dbSet.Add(entity);
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter)
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
+            if (!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var property in includeProperties.Split(new char[] {','},StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
+
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
+            if(!string.IsNullOrEmpty(includeProperties))
+            {
+                foreach (var property in includeProperties.Split(new char[] {','},StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(property);
+                }
+            }
             return query.ToList();
         }
 
