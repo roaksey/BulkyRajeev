@@ -60,15 +60,33 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     string productPath = Path.Combine(wwwRoot, @"images\product");
+                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
+                    {
+                        var oldImagePath = Path.Combine(wwwRoot,productVM.Product.ImageUrl.TrimStart('\\'));
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
                     using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
                     {
                         file.CopyTo(fileStream);
                     };
-                    productVM.Product.ImageUrl = @"images\product\" + fileName;
+                    productVM.Product.ImageUrl = @"\images\product\" + fileName;
                 }
-                _unitOfWork.Product.Add(productVM.Product);
+                if (productVM.Product.Id == 0)
+                {
+                    _unitOfWork.Product.Add(productVM.Product);
+                    TempData["success"] = "Product created successfully";
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(productVM.Product);
+                    TempData["success"] = "Product updated successfully";
+                }
+
                 _unitOfWork.Save();
-                TempData["success"] = "Product created successfully";
+                
                 return RedirectToAction(nameof(Index)); 
             }
             else
@@ -78,26 +96,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
             return View(productVM);
         }
-        public IActionResult Edit(int id) {
-            Product product = _unitOfWork.Product.GetFirstOrDefault(x=>x.Id  == id);
-            if (product != null)
-            {
-                return View(product);
-            }
-            return NotFound();
-        }
-        [HttpPost]
-        public IActionResult Edit(Product model)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Update(model);
-                _unitOfWork.Save();
-                TempData["success"] = "Product updated successfully";
-                return RedirectToAction(nameof(Index));
-            }
-            return View(model);
-        }
+  
 
         public IActionResult Delete(int id)
         {
