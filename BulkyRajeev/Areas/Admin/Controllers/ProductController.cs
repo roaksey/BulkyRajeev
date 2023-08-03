@@ -20,21 +20,12 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             
             return View(products);
         }
+        //ViewBag.CategoryList = categoryList;
 
-        public IActionResult Create()
+        // Using ViewData need type conversion. ViewBag internall use ViewData. Try Not to use ViewBag, ViewData instead go for View Model
+        //ViewData["CategoryList"] = categoryList;
+        public IActionResult Upsert(int? id)
         {
-            IEnumerable<SelectListItem> categoryList = _unitOfWork.Category.GetAll()
-                .Select(x =>
-                    new SelectListItem
-                    {
-                        Value = x.Id.ToString(),
-                        Text = x.Name
-                    }
-                );
-            //ViewBag.CategoryList = categoryList;
-
-            // Using ViewData need type conversion. ViewBag internall use ViewData. Try Not to use ViewBag, ViewData instead go for View Model
-            //ViewData["CategoryList"] = categoryList;
             ProductVM productVm = new()
             {
                 CategoryList = _unitOfWork.Category.GetAll()
@@ -42,12 +33,21 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 {
                     Value = x.Id.ToString(),
                     Text = x.Name
-                })
-            };     
-          return View(productVm);
+                }),
+                Product = new Product()
+            };    
+            if(id is null)
+            {
+                return View(productVm);
+            }
+            else
+            {
+                productVm.Product = _unitOfWork.Product.GetFirstOrDefault(x => x.Id == id);
+                return View(productVm);
+            }
         }
         [HttpPost]
-        public IActionResult Create(ProductVM productVM)
+        public IActionResult Upsert(ProductVM productVM,IFormFile? file)
         {
             if (ModelState.IsValid)
             {
