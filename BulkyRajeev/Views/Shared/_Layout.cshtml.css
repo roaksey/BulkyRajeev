@@ -44,7 +44,7 @@ button.accept-policy {
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 40px;
+  line-height: 60px;
 }
 .dropdown-toggle:active, .open .dropdown-toggle {
     background: #FFF !important;
