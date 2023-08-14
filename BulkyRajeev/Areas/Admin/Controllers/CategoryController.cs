@@ -50,7 +50,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 return NotFound();
             }
             //Category? category1 = _db.Categories.Find(id);
-            Category? category2 = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+            Category? category2 = _unitOfWork.Category.Get(x => x.Id == id);
             //Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
             if (category2 is null)
             {
@@ -82,7 +82,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 return NotFound();
             }
             //Category? category1 = _db.Categories.Find(id);
-            Category? category2 = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+            Category? category2 = _unitOfWork.Category.Get(x => x.Id == id);
             //Category? category3 = _db.Categories.Where(x=>x.Id == id).FirstOrDefault();
             if (category2 is null)
             {
@@ -94,7 +94,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
-            var obj = _unitOfWork.Category.GetFirstOrDefault(x => x.Id == id);
+            var obj = _unitOfWork.Category.Get(x => x.Id == id);
             if (obj == null)
             {
                 return NotFound();

@@ -27,7 +27,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             {
                 return View(new Company());
             }
-            Company company = _unitOfWork.Company.GetFirstOrDefault(x => x.Id == id);
+            Company company = _unitOfWork.Company.Get(x => x.Id == id);
             if (company == null)
             {
                 return NotFound();
@@ -63,7 +63,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
 
         public IActionResult Delete(int? id)
         {
-            var companyToDelete = _unitOfWork.Company.GetFirstOrDefault(x => x.Id == id);
+            var companyToDelete = _unitOfWork.Company.Get(x => x.Id == id);
             if (companyToDelete == null)
             {
                 return Json(new { success = false, message = "Error while deleting company." });
