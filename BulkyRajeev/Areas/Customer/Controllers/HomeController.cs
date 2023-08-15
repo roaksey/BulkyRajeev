@@ -28,7 +28,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         public IActionResult Detail(int productId) {
             ShoppingCart shoppingCart = new()
             {
-                Product = _unitOfWork.Product.Get(x => x.Id == productId, includeProperties: "Category"),
+                Product = _unitOfWork.Product.GetFirst(x => x.Id == productId, includeProperties: "Category"),
                 Count = 1,
                 ProductId = productId
             };
@@ -41,7 +41,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             shoppingCart.AppUserId = userId;
-            var sCartDb = _unitOfWork.ShoppingCart.Get(u=>u.AppUserId == userId && u.ProductId == shoppingCart.ProductId);
+            var sCartDb = _unitOfWork.ShoppingCart.GetFirst(u=>u.AppUserId == userId && u.ProductId == shoppingCart.ProductId);
             if(sCartDb != null)
             {
                 sCartDb.Count += shoppingCart.Count;

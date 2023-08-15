@@ -48,7 +48,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
             else
             {
-                productVm.Product = _unitOfWork.Product.Get(x => x.Id == id);
+                productVm.Product = _unitOfWork.Product.GetFirst(x => x.Id == id);
                 return View(productVm);
             }
         }
@@ -133,7 +133,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [HttpDelete]
         public IActionResult Delete(int? id)
         {
-            var prodToDelete = _unitOfWork.Product.Get(x => x.Id == id);
+            var prodToDelete = _unitOfWork.Product.GetFirst(x => x.Id == id);
             if(prodToDelete is null)
             {
                 return Json(new { success = false, message = "Error while deleting." });
