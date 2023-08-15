@@ -23,12 +23,13 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             var userId = claimIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             ShoppingCartVM shoppingCartVM = new()
             {
-                ShoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == userId,includeProperties: "Product").Where(x=>x.AppUserId == userId).ToList()
+                ShoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == userId,includeProperties: "Product").Where(x=>x.AppUserId == userId).ToList(),
+                OrderHeader = new()
             };
             foreach (var cart in shoppingCartVM.ShoppingCarts)
             {
                 cart.Price = GetPriceBasedQuantity(cart);
-                shoppingCartVM.OrderTotal += (cart.Price * cart.Count);
+                shoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
             }
             return View(shoppingCartVM);
         }
@@ -55,9 +56,9 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Remove(int cartId)
+        public IActionResult Remove(int id)
         {
-            var cart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            var cart = _unitOfWork.ShoppingCart.Get(u => u.Id == id);
             _unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
             return RedirectToAction("Index");
