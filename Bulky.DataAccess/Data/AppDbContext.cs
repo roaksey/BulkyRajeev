@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bulky.DataAccess.Data
 {
@@ -16,6 +17,8 @@ namespace Bulky.DataAccess.Data
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Company> Companies { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<OrderHeader>  OrderHeaders { get; set; }
 
         //Seed data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
