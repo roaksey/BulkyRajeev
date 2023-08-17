@@ -2,7 +2,7 @@
 
 namespace Bulky.DataAccess.Repository.IReposiotry
 {
-    internal interface IOrderDetailRepository:IRepository<OrderDetail>
+    public interface IOrderDetailRepository:IRepository<OrderDetail>
     {
         void Update(OrderDetail obj);
     }
