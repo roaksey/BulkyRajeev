@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Drawing;
+using System.Security.Claims;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
 {
@@ -62,7 +63,17 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         }
         #region API calls
         public IActionResult GetAll(string status) {
-            List<OrderHeader> orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "AppUser").ToList();
+            List<OrderHeader> orderHeaders;
+            if (User.IsInRole(SD.Role_Admin)|| User.IsInRole(SD.Role_Employee))
+            {
+                orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "AppUser").ToList();
+            }
+            else
+            {
+                var identity = (ClaimsIdentity)User.Identity;
+                var userId = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                orderHeaders = _unitOfWork.OrderHeader.GetAll(u=>u.AppUserId == userId,includeProperties:"AppUser").ToList(); 
+            }
             switch (status)
             {
                 case "pending":
