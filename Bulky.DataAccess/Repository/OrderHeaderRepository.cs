@@ -32,10 +32,18 @@ namespace Bulky.DataAccess.Repository
                 if(!string.IsNullOrEmpty(paymentStatus)) orderDb.PaymentStatus = paymentStatus;
             }
         }
-
-        public void UpdateStripePaymentId(int id, string sessionId, string stripePaymentId)
+        public void UpdateStripePaymentId(int id, string sessionId, string paymentIntentId)
         {
-            throw new NotImplementedException();
+            var orderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.Id == id);
+            if (!string.IsNullOrEmpty(sessionId))
+            {
+                orderFromDb.SessionId = sessionId;
+            }
+            if (!string.IsNullOrEmpty(paymentIntentId))
+            {
+                orderFromDb.PaymentIntendId = paymentIntentId;
+                orderFromDb.PaymentDate = DateTime.Now;
+            }
         }
     }
 }
