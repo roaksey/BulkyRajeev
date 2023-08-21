@@ -29,7 +29,10 @@ namespace Bulky.DataAccess.Repository
             if (orderDb != null)
             {
                 orderDb.OrderStatus = orderStatus;
-                if(!string.IsNullOrEmpty(paymentStatus)) orderDb.PaymentStatus = paymentStatus;
+                if (!string.IsNullOrEmpty(paymentStatus))
+                {
+                    orderDb.PaymentStatus = paymentStatus;
+                }
             }
         }
         public void UpdateStripePaymentId(int id, string sessionId, string paymentIntentId)

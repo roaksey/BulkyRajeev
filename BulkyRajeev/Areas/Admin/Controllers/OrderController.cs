@@ -1,5 +1,6 @@
 ﻿using Bulky.DataAccess.Repository.IReposiotry;
 using Bulky.Models;
+using Bulky.Models.ViewModels;
 using Bulky.Utility;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -19,6 +20,16 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         {
             return View();
         }
+
+        public IActionResult Detail(int orderId)
+        {
+            OrderVM orderVM = new()
+            {
+                OrderHeader = _unitOfWork.OrderHeader.GetFirst(u => u.Id == orderId, includeProperties: "AppUser"),
+                OrderDetail = _unitOfWork.OrderDetail.GetAll(u=>u.OrderHeaderId == orderId,includeProperties: "Product")
+            };
+            return View(orderVM);
+        }
         #region API calls
         public IActionResult GetAll(string status) {
             List<OrderHeader> orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "AppUser").ToList();
@@ -34,7 +45,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     orderHeaders = orderHeaders.Where(x => x.PaymentStatus == SD.StatusShipped).ToList();
                     break;
                 case "approved":
-                    orderHeaders = orderHeaders.Where(x => x.PaymentStatus == SD.StatusApproved).ToList();
+                    orderHeaders = orderHeaders.Where(x => x.PaymentStatus == SD.PaymentStatusApproved).ToList();
                     break;
                 default:
                     break;
