@@ -7,6 +7,26 @@
             </div>
         </div>
     </div>
+    <div class="d-flex justify-content-between pb-5 pt-2">
+        <span></span>
+        <ul class="list-group list-group-horizontal-sm">
+            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="inprocess">
+            <li class="list-group-item">In Process</li>
+            </a>
+            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="pending">
+            <li class="list-group-item">Payment Pending</li>
+            </a>
+            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="completed">
+            <li class="list-group-item">Completed</li>
+            </a>
+            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="approved">
+            <li class="list-group-item">Approved</li>
+            </a>
+            <a style="text-decoration:none;" asp-controller="Order" asp-action="Index" asp-route-status="all">
+            <li class="list-group-item">All</li>
+            </a>
+        </ul>
+    </div>
     <div class="card-body p-4">        
         <table id="productTable" class="table table-bordered table-striped" width="100%">
             <thead>
@@ -19,30 +39,7 @@
                     <th>Total</th>
                     <th></th>
                 </tr>
-            </thead>
-            <tbody>
-                @* using datatables.net*@
-                @*  @foreach (var product in Model)
-                {
-                <tr>
-                <td>@product.Title</td>
-                <td>@product.ISBN</td>
-                <td>@product.Author</td>
-                <td> @product.Category.Name</td>
-                <td>@product.ListPrice</td>
-                <td>
-                <div class="w-75 btn-group" role="group">
-                <a asp-controller="Product" asp-action="Upsert" asp-route-id = "@product.Id" class="btn btn-primary mx-2">
-                <i class="bi bi-pencil-square"></i> Edit
-                </a>
-                <a asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger mx-2">
-                <i class="bi bi-trash-fill"></i> Delete
-                </a>
-                </div>
-                </td>
-                </tr>
-                }*@
-            </tbody>
+            </thead>           
         </table>
     </div>
 </div>
