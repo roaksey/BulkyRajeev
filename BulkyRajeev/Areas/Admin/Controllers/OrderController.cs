@@ -4,6 +4,7 @@ using Bulky.Models.ViewModels;
 using Bulky.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System.Diagnostics;
 using System.Drawing;
 using System.Security.Claims;
@@ -90,6 +91,32 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             TempData["success"] = "Order shipped successfully.";
             return RedirectToAction(nameof(Detail),new {orderId= OrderVM.OrderHeader.Id});  
         }
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
+        public IActionResult CancelOrder()
+        {
+            var orderHeader = _unitOfWork.OrderHeader.GetFirst(u => u.Id == OrderVM.OrderHeader.Id);
+            if(orderHeader.PaymentStatus== SD.PaymentStatusApproved)
+            {
+                var options = new RefundCreateOptions
+                {
+                    Reason = RefundReasons.RequestedByCustomer,
+                    PaymentIntent = orderHeader.PaymentIntendId
+                };
+                var service = new RefundService();
+                Refund refund = service.Create(options);
+                _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, SD.StatusCancelled, SD.StatusRefunded);
+            }
+            else
+            {
+                   _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id,SD.StatusCancelled,SD.StatusCancelled);
+            }
+            _unitOfWork.Save();
+            TempData["success"] = "Order cancelled successfully.";
+            return RedirectToAction(nameof(Detail),new {orderId = OrderVM.OrderHeader.Id});
+        }
+
         #region API calls
         public IActionResult GetAll(string status) {
             List<OrderHeader> orderHeaders;
