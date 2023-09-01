@@ -54,11 +54,13 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
             {
                 sCartDb.Count += shoppingCart.Count;
                 _unitOfWork.ShoppingCart.Update(sCartDb);
+                TempData["success"] = "Cart updated successfully.";
                 _unitOfWork.Save();
             }
             else
             {
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
+                TempData["success"] = "Cart added successfully.";
                 _unitOfWork.Save();
                 HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(x => x.AppUserId == userId).Count());
             }

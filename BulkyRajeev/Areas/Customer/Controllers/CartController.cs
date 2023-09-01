@@ -46,7 +46,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
         }
         public IActionResult Minus(int id)
         {
-            var cart = _unitOfWork.ShoppingCart.GetFirst(u => u.Id == id);
+            var cart = _unitOfWork.ShoppingCart.GetFirst(u => u.Id == id,tracked:true);
             if(cart.Count <= 1)
             {
                 //Remove that from cart
@@ -64,7 +64,7 @@ namespace BulkyBookWeb.Areas.Customer.Controllers
 
         public IActionResult Remove(int id)
         {
-            var cart = _unitOfWork.ShoppingCart.GetFirst(u => u.Id == id);
+            var cart = _unitOfWork.ShoppingCart.GetFirst(u => u.Id == id,tracked:true);
             HttpContext.Session.SetInt32(SD.SessionCart, _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == cart.AppUserId).Count() - 1);
             _unitOfWork.ShoppingCart.Remove(cart);
             _unitOfWork.Save();
