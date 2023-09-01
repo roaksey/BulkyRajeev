@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Bulky.Utility;
 using Stripe;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,12 @@ builder.Services.ConfigureApplicationCookie(options => {
     options.LoginPath = $"/Identity/Account/Login";
     options.LogoutPath = $"/Identity/Account/Logout";
     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+builder.Services.AddAuthentication().AddFacebook(option =>
+{
+    option.AppId = "1296920547624847";
+    option.AppSecret = "5d5c0ec2b18e14db36c8da9b4d3a1157";
+    option.AccessDeniedPath = "/AccessDeniedPathInfo";
 });
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
