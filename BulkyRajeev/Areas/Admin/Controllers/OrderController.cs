@@ -187,13 +187,13 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             List<OrderHeader> orderHeaders;
             if (User.IsInRole(SD.Role_Admin)|| User.IsInRole(SD.Role_Employee))
             {
-                var identity = (ClaimsIdentity)User.Identity;
-                var userId = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
-                orderHeaders = _unitOfWork.OrderHeader.GetAll(u => u.AppUserId == userId, includeProperties: "AppUser").ToList();
+                orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "AppUser").ToList();
             }
             else
             {
-                orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "AppUser").ToList();               
+                var identity = (ClaimsIdentity)User.Identity;
+                var userId = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                orderHeaders = _unitOfWork.OrderHeader.GetAll(u => u.AppUserId == userId, includeProperties: "AppUser").ToList();                            
             }
             switch (status)
             {
