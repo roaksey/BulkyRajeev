@@ -30,6 +30,18 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         public IActionResult GetAll()
         {
             var UserList = _db.AppUsers.Include(x=>x.Company).ToList();
+            var roles = _db.Roles.ToList();
+            var userRoles = _db.UserRoles.ToList();
+
+            foreach (var user in UserList)
+            {
+                var role = userRoles.FirstOrDefault(u => u.UserId == user.Id);
+                user.Role = roles.FirstOrDefault(x => x.Id == role.RoleId).Name;
+                //if(user.Company == null)
+                //{
+                //    user.Company = new Company { Name = ""};
+                //}
+            }
             return Json(new { data = UserList });
         }
         #endregion
