@@ -49,7 +49,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult LockUnlock([FromBody]string id)
         {
-            var objFromDb = _db.AppUsers.FirstOrDefault(x=> x.Id == id);                                                       j
+            var objFromDb = _db.AppUsers.FirstOrDefault(x=> x.Id == id);                                                       
             if(objFromDb == null)
             {
                 return Json(new { success = false, message = "Error while Locking/Unlocking User." });
@@ -63,7 +63,7 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 objFromDb.LockoutEnd = DateTime.Now.AddYears(1000);
             }
             _db.SaveChanges();
-            return Json(new { success = true, data = objFromDb }); 
+            return Json(new { success = true,message="Operation Successful." }); 
         }
         #endregion
 
