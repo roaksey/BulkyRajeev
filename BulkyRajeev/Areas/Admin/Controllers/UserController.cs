@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing.Constraints;
+using Microsoft.CodeAnalysis.Scripting.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
@@ -43,6 +44,26 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 //}
             }
             return Json(new { data = UserList });
+        }
+
+        [HttpPost]
+        public IActionResult LockUnlock([FromBody]string id)
+        {
+            var objFromDb = _db.AppUsers.FirstOrDefault(x=> x.Id == id);                                                       j
+            if(objFromDb == null)
+            {
+                return Json(new { success = false, message = "Error while Locking/Unlocking User." });
+            }
+            if(objFromDb.LockoutEnd != null && objFromDb.LockoutEnd > DateTime.Now)
+            {
+                objFromDb.LockoutEnd = DateTime.Now;
+            }
+            else
+            {
+                objFromDb.LockoutEnd = DateTime.Now.AddYears(1000);
+            }
+            _db.SaveChanges();
+            return Json(new { success = true, data = objFromDb }); 
         }
         #endregion
 
