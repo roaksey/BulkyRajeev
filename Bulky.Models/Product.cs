@@ -48,5 +48,7 @@ namespace Bulky.Models
         //For multiple Image
         //[ValidateNever] 
         //public  string  ImageUrl { get; set; }
+        [ValidateNever]
+        public List<ProductImage> ProductImages { get; set; }
     }
 }

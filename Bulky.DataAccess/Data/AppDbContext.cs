@@ -19,6 +19,7 @@ namespace Bulky.DataAccess.Data
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<OrderHeader>  OrderHeaders { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         //Seed data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
