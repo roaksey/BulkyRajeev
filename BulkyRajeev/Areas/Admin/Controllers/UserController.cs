@@ -45,6 +45,27 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
             return Json(new { data = UserList });
         }
+        public IActionResult RoleManagement(string userId)
+        {
+            var RoleId = _db.UserRoles.FirstOrDefault(x=> x.UserId == userId).RoleId;
+            RoleManagementVM roleManagementVM = new RoleManagementVM
+            {
+                AppUser = _db.AppUsers.Include(u => u.Company).FirstOrDefault(x => x.Id == userId),
+                RoleLisst = _db.Roles.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Name
+                }).ToList(),
+                CompanyList = _db.Companies.Select(p => new SelectListItem
+                {
+                    Text = p.Name,
+                    Value = p.Id.ToString()
+                })
+            };
+            roleManagementVM.AppUser.Role = _db.Roles.FirstOrDefault(x => x.Id == RoleId).Name;
+            
+            return View(roleManagementVM);
+        }
 
         [HttpPost]
         public IActionResult LockUnlock([FromBody]string id)
