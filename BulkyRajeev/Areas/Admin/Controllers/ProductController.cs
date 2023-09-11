@@ -60,21 +60,21 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                 string wwwRoot = _webHostEnvironment.WebRootPath;
                 if (file != null)
                 {
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string productPath = Path.Combine(wwwRoot, @"images\product");
-                    if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
-                    {
-                        var oldImagePath = Path.Combine(wwwRoot, productVM.Product.ImageUrl.TrimStart('\\'));
-                        if (System.IO.File.Exists(oldImagePath))
-                        {
-                            System.IO.File.Delete(oldImagePath);
-                        }
-                    }
-                    using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    };
-                    productVM.Product.ImageUrl = @"\images\product\" + fileName;
+                    //string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    //string productPath = Path.Combine(wwwRoot, @"images\product");
+                    //if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
+                    //{
+                    //    var oldImagePath = Path.Combine(wwwRoot, productVM.Product.ImageUrl.TrimStart('\\'));
+                    //    if (System.IO.File.Exists(oldImagePath))
+                    //    {
+                    //        System.IO.File.Delete(oldImagePath);
+                    //    }
+                    //}
+                    //using (var fileStream = new FileStream(Path.Combine(productPath, fileName), FileMode.Create))
+                    //{
+                    //    file.CopyTo(fileStream);
+                    //};
+                    //productVM.Product.ImageUrl = @"\images\product\" + fileName;
                 }
                 if (productVM.Product.Id == 0)
                 {
@@ -138,10 +138,10 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Error while deleting." });
             }
-            var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath,prodToDelete.ImageUrl.TrimStart('\\'));  
-            if(System.IO.File.Exists(oldImagePath)) { 
-                System.IO.File.Delete(oldImagePath);
-            }
+            //var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath,prodToDelete.ImageUrl.TrimStart('\\'));  
+            //if(System.IO.File.Exists(oldImagePath)) { 
+            //    System.IO.File.Delete(oldImagePath);
+            //}
             _unitOfWork.Product.Remove(prodToDelete);
             _unitOfWork.Save();
             return Json(new { success = true, message = "Product deleted successfully." });
