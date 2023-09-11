@@ -10,9 +10,10 @@
     <div class="card-body p-4">
         <div class="row pt-3">
             <div class="col-md-12 text-center">
-                <form id="manageUserRole" method="post">
+                <form method="post">
+                    <input asp-for="AppUser.Id" hidden />
                     <div class="form-floating mb-3 col-md-12">
-                        <input asp-for="AppUser.Name" class="form-control" autocomplete="username" readonly/>
+                        <input asp-for="AppUser.Name" class="form-control" autocomplete="username" readonly />
                         <label asp-for="AppUser.Name" class="ms-2 text-muted">Name</label>
                         <span asp-validation-for="AppUser.Name" class="text-danger"></span>
                     </div>
@@ -25,7 +26,7 @@
                     @{
                         var companyVisible = "display:none";
                     }
-                    @if(Model.AppUser.Role == SD.Role_Company)
+                    @if (Model.AppUser.Role == SD.Role_Company)
                     {
                         companyVisible = "display:block";
                     }
