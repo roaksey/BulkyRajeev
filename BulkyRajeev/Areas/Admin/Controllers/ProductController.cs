@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing.Constraints;
+using System.Net.Http.Headers;
 
 namespace BulkyBookWeb.Areas.Admin.Controllers
 {
@@ -48,18 +49,17 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
             }
             else
             {
-                productVm.Product = _unitOfWork.Product.GetFirst(x => x.Id == id);
+                productVm.Product = _unitOfWork.Product.GetFirst(x => x.Id == id,includeProperties: "ProductImages");
                 return View(productVm);
             }
         }
         [HttpPost]
-        public IActionResult Upsert(ProductVM productVM, IFormFile? file)
+        public IActionResult Upsert(ProductVM productVM, List<IFormFile> files)
         {
             if (ModelState.IsValid)
             {
-                string wwwRoot = _webHostEnvironment.WebRootPath;
-                if (file != null)
-                {
+                //if (file != null)
+                //{
                     //string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     //string productPath = Path.Combine(wwwRoot, @"images\product");
                     //if (!string.IsNullOrEmpty(productVM.Product.ImageUrl))
@@ -75,20 +75,53 @@ namespace BulkyBookWeb.Areas.Admin.Controllers
                     //    file.CopyTo(fileStream);
                     //};
                     //productVM.Product.ImageUrl = @"\images\product\" + fileName;
-                }
+                //}
                 if (productVM.Product.Id == 0)
                 {
                     _unitOfWork.Product.Add(productVM.Product);
-                    TempData["success"] = "Product created successfully";
+                    //TempData["success"] = "Product created successfully";
                 }
                 else
                 {
                     _unitOfWork.Product.Update(productVM.Product);
-                    TempData["success"] = "Product updated successfully";
+                    //TempData["success"] = "Product updated successfully";
                 }
-
                 _unitOfWork.Save();
 
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if(files != null)
+                {
+                    foreach (IFormFile file in files)
+                    {
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string productPath = @"images\products\product-" + productVM.Product.Id;
+                        string finalPath = Path.Combine(wwwRootPath, productPath);
+
+                        if (!Directory.Exists(finalPath))
+                            Directory.CreateDirectory(finalPath);
+
+                        using (var fileStream = new FileStream(Path.Combine(finalPath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+
+                        ProductImage productImage = new()
+                        {
+                            ImageUrl = @"\" + productPath + @"\" + fileName,
+                            ProductId = productVM.Product.Id,
+                        };
+
+                        if (productVM.Product.ProductImages == null)
+                            productVM.Product.ProductImages = new List<ProductImage>();
+
+                        productVM.Product.ProductImages.Add(productImage);
+
+                    }
+
+                    _unitOfWork.Product.Update(productVM.Product);
+                    _unitOfWork.Save();
+                }
+                TempData["success"] = "Product created/updated successfully";
                 return RedirectToAction(nameof(Index));
             }
             else
